@@ -4,6 +4,7 @@ import br.com.andersonleite.animelinkapi.domain.Anime;
 import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
 import br.com.andersonleite.animelinkapi.dto.AnimePutRequestBody;
 import br.com.andersonleite.animelinkapi.service.AnimeService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -42,7 +43,7 @@ public class AnimeController {
   }
 
   @PostMapping
-  public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animePostRequestBody) {
+  public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody) {
     return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
   }
 
