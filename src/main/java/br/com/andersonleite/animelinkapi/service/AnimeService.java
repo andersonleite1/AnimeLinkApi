@@ -5,6 +5,7 @@ import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
 import br.com.andersonleite.animelinkapi.dto.AnimePutRequestBody;
 import br.com.andersonleite.animelinkapi.exception.BadRequestException;
 import br.com.andersonleite.animelinkapi.repository.AnimeRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class AnimeService {
     return animeRepository.findByName(name);
   }
 
+  @Transactional
   public Anime save(AnimePostRequestBody animePostRequestBody) {
     return animeRepository.save(Anime.builder().name(animePostRequestBody.getName()).build());
   }
