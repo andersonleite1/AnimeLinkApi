@@ -3,12 +3,11 @@ package br.com.andersonleite.animelinkapi.service;
 import br.com.andersonleite.animelinkapi.domain.Anime;
 import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
 import br.com.andersonleite.animelinkapi.dto.AnimePutRequestBody;
+import br.com.andersonleite.animelinkapi.exception.BadRequestException;
 import br.com.andersonleite.animelinkapi.repository.AnimeRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class AnimeService {
 
   public Anime findByIdOrThrowBadRequestException(long id) {
     return animeRepository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not Found"));
+        .orElseThrow(() ->  new BadRequestException("Anime not Found"));
   }
 
   public List<Anime> findByName(String name) {
