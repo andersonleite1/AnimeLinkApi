@@ -1,6 +1,7 @@
 package br.com.andersonleite.animelinkapi.repository;
 
 import br.com.andersonleite.animelinkapi.domain.Anime;
+import br.com.andersonleite.animelinkapi.util.AnimeCreator;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ class AnimeRepositoryTest {
   @Test
   @DisplayName("Save creates anime when Successful")
   void save_PersistAnime_WhenSuccessful(){
-    Anime animeToBeSaved = createAnime();
+    Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
     Anime animeSaved = this.animeRepository.save(animeToBeSaved);
     Assertions.assertThat(animeSaved).isNotNull();
     Assertions.assertThat(animeSaved.getId()).isNotNull();
@@ -29,7 +30,7 @@ class AnimeRepositoryTest {
   @Test
   @DisplayName("Save updates anime when Successful")
   void save_UpdatesAnime_WhenSuccessful(){
-    Anime animeToBeSaved = createAnime();
+    Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
 
     Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
@@ -47,7 +48,7 @@ class AnimeRepositoryTest {
   @Test
   @DisplayName("Delete removes anime when Successful")
   void delete_RemovesAnime_WhenSuccessful(){
-    Anime animeToBeSaved = createAnime();
+    Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
 
     Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
@@ -62,7 +63,7 @@ class AnimeRepositoryTest {
   @Test
   @DisplayName("Find By Name returns list of anime when Successful")
   void findByName_ReturnsListOfAnime_WhenSuccessful(){
-    Anime animeToBeSaved = createAnime();
+    Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
 
     Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
@@ -93,10 +94,5 @@ class AnimeRepositoryTest {
         .isThrownBy(() -> this.animeRepository.save(anime))
         .withMessageContaining("The anime name cannot be empty");
   }
-
-  private Anime createAnime(){
-    return Anime.builder()
-        .name("Hajime no Ippo")
-        .build();
-  }
+  
 }
