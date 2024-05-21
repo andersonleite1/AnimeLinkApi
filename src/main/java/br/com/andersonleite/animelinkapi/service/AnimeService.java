@@ -5,12 +5,13 @@ import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
 import br.com.andersonleite.animelinkapi.dto.AnimePutRequestBody;
 import br.com.andersonleite.animelinkapi.exception.BadRequestException;
 import br.com.andersonleite.animelinkapi.repository.AnimeRepository;
-import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
