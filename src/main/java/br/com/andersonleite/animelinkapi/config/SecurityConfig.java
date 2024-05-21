@@ -1,34 +1,40 @@
 package br.com.andersonleite.animelinkapi.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
-public class SecurityConfig {
+@EnableWebSecurity
+@Log4j2
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((authz) -> authz
-                .anyRequest().authenticated()
-        ).httpBasic(Customizer.withDefaults());
-        return http.build();
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+//                csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        UserDetails user = User.withUsername("anderson")
-                .password(encoder.encode("pass"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        log.info("Password encoded {}", passwordEncoder.encode("test"));
+        auth.inMemoryAuthentication()
+                .withUser("anderson")
+                .password(passwordEncoder.encode("pass"))
+                .roles("USER", "ADMIN")
+                .and()
+                .withUser("leite")
+                .password(passwordEncoder.encode("secret_pass"))
+                .roles("USER");
     }
 }
+
