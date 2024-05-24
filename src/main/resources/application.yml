@@ -1,0 +1,26 @@
+server:
+  error:
+    include-stacktrace: on_param
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/animes?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus
+
+info:
+  app: AnimeApi
+  website: https://andersonleite.dev.br
+  github: https://github.com/andersonleite1/AnimeApi
