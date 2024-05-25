@@ -33,7 +33,15 @@ public class AnimeService {
 
   @Transactional
   public Anime save(AnimePostRequestBody animePostRequestBody) {
-    return animeRepository.save(Anime.builder().name(animePostRequestBody.getName()).build());
+    return animeRepository.save(Anime.builder()
+            .name(animePostRequestBody.getName())
+            .synopsis(animePostRequestBody.getSynopsis())
+            .animationStudio(animePostRequestBody.getAnimationStudio())
+            .author(animePostRequestBody.getAuthor())
+            .classificationAge(animePostRequestBody.getClassificationAge())
+            .inProgress(animePostRequestBody.isInProgress())
+            .releaseYear(animePostRequestBody.getReleaseYear())
+            .build());
   }
 
   public void replace(AnimePutRequestBody animePutRequestBody) {
@@ -41,6 +49,12 @@ public class AnimeService {
     Anime anime = Anime.builder()
         .id(savedAnime.getId())
         .name(animePutRequestBody.getName())
+        .synopsis(animePutRequestBody.getSynopsis())
+        .animationStudio(animePutRequestBody.getAnimationStudio())
+        .author(animePutRequestBody.getAuthor())
+        .classificationAge(animePutRequestBody.getClassificationAge())
+        .inProgress(animePutRequestBody.isInProgress())
+        .releaseYear(animePutRequestBody.getReleaseYear())
         .build();
 
     animeRepository.save(anime);

@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Data
@@ -24,5 +21,21 @@ public class Anime {
 
   @NotEmpty(message = "The anime name cannot be empty")
   private String name;
+
+  private String synopsis;
+
+  @Column(name = "release_year")
+  private Integer releaseYear;
+
+  @Column(name = "classification_age")
+  private String classificationAge;
+
+  private String author;
+
+  @Column(name = "animation_studio")
+  private String animationStudio;
+
+  @Column(name = "in_progres")
+  private boolean inProgress = false;
 
 }
