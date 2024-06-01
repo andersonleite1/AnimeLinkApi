@@ -6,21 +6,39 @@ public class AnimeCreator {
 
   public static Anime createAnimeToBeSaved(){
     return Anime.builder()
-        .name("Hajime no Ippo")
-        .build();
+            .name("Naruto")
+            .synopsis("A ninja story")
+            .releaseYear(2002)
+            .classificationAge("PG-13")
+            .author("Masashi Kishimoto")
+            .animationStudio("Studio Pierrot")
+            .inProgress(true)
+            .build();
   }
 
   public static Anime createValidAnime(){
     return Anime.builder()
-        .name("Hajime no Ippo")
-        .id(1L)
-        .build();
+            .id(1L)
+            .name("Naruto")
+            .synopsis("A ninja story")
+            .releaseYear(2002)
+            .classificationAge("PG-13")
+            .author("Masashi Kishimoto")
+            .animationStudio("Studio Pierrot")
+            .inProgress(true)
+            .build();
   }
 
   public static Anime createValidUpdatedAnime(){
     return Anime.builder()
-        .name("Hajime no Ippo 2")
-        .id(1L)
-        .build();
+            .id(1L)
+            .name("Naruto")
+            .synopsis("A ninja story")
+            .releaseYear(2002)
+            .classificationAge("PG-13")
+            .author("Masashi Kishimoto")
+            .animationStudio("Studio Pierrot")
+            .inProgress(true)
+            .build();
   }
 }
