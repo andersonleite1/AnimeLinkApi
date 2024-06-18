@@ -24,7 +24,7 @@ jobs:
               run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
 
             - name: Build docker image
-              run: docker build -t andersonleitedev/AnimeLinkAPI .
+              run: docker build -t andersonleitedev/animelinkapi .
 
             - name: Push image docker
-              run: docker push andersonleitedev/AnimeLinkAPI
+              run: docker push andersonleitedev/animelinkapi
