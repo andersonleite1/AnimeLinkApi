@@ -1,0 +1,30 @@
+name: Deploy Application in Production
+
+on:
+    push:
+        branches: [prod]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Java
+              uses: actions/setup-java@v4
+              with:
+                distribution: 'temurin'
+                java-version: '17'
+
+            - name: Build project
+              run: mvn clean install
+
+            - name: Login Docker Hub
+              run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+
+            - name: Build docker image
+              run: docker build -t andersonleitedev/AnimeLinkAPI .
+
+            - name: Push image docker
+              run: docker push andersonleitedev/AnimeLinkAPI

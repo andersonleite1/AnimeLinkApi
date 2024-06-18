@@ -11,7 +11,7 @@
   </parent>
   <groupId>br.com.andersonleite</groupId>
   <artifactId>AnimeLinkAPI</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <name>AnimeLinkAPI</name>
   <description>AnimeLinkAPI</description>
   <properties>
