@@ -106,7 +106,7 @@ br.com.andersonleite.animelinkapi
 
 1. Clone o repositório:
 ```sh
-git clone https://github.com/seu-usuario/animelinkapi.git 
+git clone https://github.com/andersonleite1/AnimeApi.git 
 ```
 
 2. Navegue até o diretório do projeto:
