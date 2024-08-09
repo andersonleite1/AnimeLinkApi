@@ -24,13 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // Desativa toda a segurança
         http.csrf().disable()
-//                csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
+                .authorizeRequests().anyRequest().permitAll();
     }
 
     @Override
