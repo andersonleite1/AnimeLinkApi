@@ -33,6 +33,7 @@ public class UserData implements UserDetails {
     private String name;
     private String username;
     private String password;
+    @NotEmpty(message = "The user authorities cannot be empty")
     private String authorities;
 
     @Override
