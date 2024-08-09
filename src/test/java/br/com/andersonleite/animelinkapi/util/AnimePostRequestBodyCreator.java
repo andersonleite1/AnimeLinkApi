@@ -1,6 +1,6 @@
 package br.com.andersonleite.animelinkapi.util;
 
-import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePostRequestBody;
 
 public class AnimePostRequestBodyCreator {
   public static AnimePostRequestBody createAnimePostRequestBody() {

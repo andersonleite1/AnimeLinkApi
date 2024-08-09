@@ -2,8 +2,8 @@ package br.com.andersonleite.animelinkapi.controller;
 
 
 import br.com.andersonleite.animelinkapi.domain.Anime;
-import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
-import br.com.andersonleite.animelinkapi.dto.AnimePutRequestBody;
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePostRequestBody;
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePutRequestBody;
 import br.com.andersonleite.animelinkapi.service.AnimeService;
 import br.com.andersonleite.animelinkapi.util.AnimeCreator;
 import br.com.andersonleite.animelinkapi.util.AnimePostRequestBodyCreator;

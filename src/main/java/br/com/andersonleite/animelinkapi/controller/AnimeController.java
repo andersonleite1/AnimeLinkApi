@@ -1,8 +1,8 @@
 package br.com.andersonleite.animelinkapi.controller;
 
 import br.com.andersonleite.animelinkapi.domain.Anime;
-import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
-import br.com.andersonleite.animelinkapi.dto.AnimePutRequestBody;
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePostRequestBody;
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePutRequestBody;
 import br.com.andersonleite.animelinkapi.service.AnimeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/animes")
+@RequestMapping("api/v1/animes")
 @Log4j2
 @RequiredArgsConstructor
 public class AnimeController {

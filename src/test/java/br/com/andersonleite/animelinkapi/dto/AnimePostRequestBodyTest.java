@@ -1,5 +1,6 @@
 package br.com.andersonleite.animelinkapi.dto;
 
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePostRequestBody;
 import br.com.andersonleite.animelinkapi.util.AnimePostRequestBodyCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

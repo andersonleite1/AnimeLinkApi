@@ -1,8 +1,8 @@
 package br.com.andersonleite.animelinkapi.service;
 
 import br.com.andersonleite.animelinkapi.domain.Anime;
-import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
-import br.com.andersonleite.animelinkapi.dto.AnimePutRequestBody;
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePostRequestBody;
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePutRequestBody;
 import br.com.andersonleite.animelinkapi.exception.BadRequestException;
 import br.com.andersonleite.animelinkapi.repository.AnimeRepository;
 import lombok.RequiredArgsConstructor;

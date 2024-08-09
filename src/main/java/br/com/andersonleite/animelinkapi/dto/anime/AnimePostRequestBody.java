@@ -1,4 +1,4 @@
-package br.com.andersonleite.animelinkapi.dto;
+package br.com.andersonleite.animelinkapi.dto.anime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -2,7 +2,7 @@ package br.com.andersonleite.animelinkapi.integration;
 
 import br.com.andersonleite.animelinkapi.domain.Anime;
 import br.com.andersonleite.animelinkapi.domain.UserData;
-import br.com.andersonleite.animelinkapi.dto.AnimePostRequestBody;
+import br.com.andersonleite.animelinkapi.dto.anime.AnimePostRequestBody;
 import br.com.andersonleite.animelinkapi.repository.AnimeRepository;
 import br.com.andersonleite.animelinkapi.repository.UserDataRepository;
 import br.com.andersonleite.animelinkapi.util.AnimeCreator;
