@@ -106,12 +106,12 @@ br.com.andersonleite.animelinkapi
 
 1. Clone o repositório:
 ```sh
-git clone https://github.com/andersonleite1/AnimeApi.git 
+git clone https://github.com/andersonleite1/AnimeApi.git
 ```
 
 2. Navegue até o diretório do projeto:
 ```sh
-cd animelinkapi
+cd AnimeApi
 ```
 
 3. Compile e execute a aplicação:
