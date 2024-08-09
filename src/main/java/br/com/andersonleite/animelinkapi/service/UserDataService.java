@@ -3,7 +3,6 @@ package br.com.andersonleite.animelinkapi.service;
 import br.com.andersonleite.animelinkapi.domain.UserData;
 import br.com.andersonleite.animelinkapi.dto.userData.UserDataGetRequestBody;
 import br.com.andersonleite.animelinkapi.repository.UserDataRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

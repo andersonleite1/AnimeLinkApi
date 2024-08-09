@@ -1,6 +1,5 @@
 package br.com.andersonleite.animelinkapi.controller;
 
-import br.com.andersonleite.animelinkapi.domain.UserData;
 import br.com.andersonleite.animelinkapi.dto.userData.UserDataGetRequestBody;
 import br.com.andersonleite.animelinkapi.service.UserDataService;
 import org.springframework.http.ResponseEntity;
