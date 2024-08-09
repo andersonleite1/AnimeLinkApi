@@ -1,4 +1,9 @@
-# AnimeLinkAPI
+<h1 align="center">
+  <img src="https://github.com/andersonleite1/AnimeApi/blob/master/src/img/API.png?raw=true" alt="AnimeLink Api" width="450px"/> 
+</h1>
+
+<h2 align="center">AnimeLinkAPI</h2>
+<br>
 
 Este projeto é uma API desenvolvida com Spring Boot para gerenciar informações sobre animes e usuários.
 
