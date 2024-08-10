@@ -9,10 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +18,7 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "user_data")
+@Entity(name = "users")
 @Builder
 public class UserData implements UserDetails {
 
@@ -29,11 +26,18 @@ public class UserData implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "The user name cannot be empty")
     private String name;
+
+    @NotEmpty(message = "The user username cannot be empty")
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @NotEmpty(message = "The user password cannot be empty")
+    @Column(nullable = false)
     private String password;
+
     @NotEmpty(message = "The user authorities cannot be empty")
+    @Column(nullable = false)
     private String authorities;
 
     @Override

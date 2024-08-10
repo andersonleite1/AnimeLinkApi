@@ -1,12 +1,13 @@
 package br.com.andersonleite.animelinkapi.controller;
 
 import br.com.andersonleite.animelinkapi.dto.userData.UserDataGetRequestBody;
+import br.com.andersonleite.animelinkapi.dto.userData.UserDataPostRequestBody;
 import br.com.andersonleite.animelinkapi.service.UserDataService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -21,5 +22,10 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDataGetRequestBody> getById(@PathVariable Long id) {
         return ResponseEntity.ok(userDataService.getUserById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDataGetRequestBody> save(@Valid @RequestBody UserDataPostRequestBody userData) {
+        return new ResponseEntity<>(userDataService.save(userData), HttpStatus.CREATED);
     }
 }

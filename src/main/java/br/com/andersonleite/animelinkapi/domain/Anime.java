@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "animes")
 @Builder
 public class Anime {
 
