@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://github.com/andersonleite1/AnimeApi/blob/master/src/img/API.png?raw=true" alt="AnimeLink Api" width="450px"/> 
+  <img src="https://github.com/andersonleite1/AnimeApi/blob/master/src/img/API.png?raw=true" alt="AnimeLink Api" width="350px"/> 
 </h1>
 
 <h2 align="center">AnimeLinkAPI</h2>
