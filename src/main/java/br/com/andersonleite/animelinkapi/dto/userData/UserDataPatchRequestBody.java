@@ -13,15 +13,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDataPostRequestBody {
+public class UserDataPatchRequestBody {
     private String name;
-
-    @NotBlank(message = "The user username cannot be empty")
+    @NotBlank(message = "The user username cannot be blank")
     private String username;
-
-    @NotBlank(message = "The user password cannot be empty")
-    private String password;
-
-    @NotBlank(message = "The user authorities cannot be empty")
+    @NotEmpty(message = "The user authorities cannot be empty")
     private String authorities;
+
 }

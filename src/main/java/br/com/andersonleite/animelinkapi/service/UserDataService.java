@@ -2,6 +2,7 @@ package br.com.andersonleite.animelinkapi.service;
 
 import br.com.andersonleite.animelinkapi.domain.UserData;
 import br.com.andersonleite.animelinkapi.dto.userData.UserDataGetRequestBody;
+import br.com.andersonleite.animelinkapi.dto.userData.UserDataPatchRequestBody;
 import br.com.andersonleite.animelinkapi.dto.userData.UserDataPostRequestBody;
 import br.com.andersonleite.animelinkapi.repository.UserDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,7 @@ public class UserDataService implements UserDetailsService {
 
   public UserDataGetRequestBody getUserById(Long id) {
      UserData userDataFound = userDataRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-     return UserDataGetRequestBody.builder()
-             .id(userDataFound.getId())
-             .name(userDataFound.getName())
-             .username(userDataFound.getUsername())
-             .authorities(userDataFound.getAuthorities().stream().map(authority -> authority.getAuthority())
-                     .collect(Collectors.toList()))
-             .build();
+     return userDataToDto(userDataFound);
   }
 
   @Override
@@ -53,14 +47,30 @@ public class UserDataService implements UserDetailsService {
                       .password(encodedPassword)
                       .authorities(user.getAuthorities())
               .build());
-
-      return UserDataGetRequestBody.builder()
-              .id(userSaved.getId())
-              .name(userSaved.getName())
-              .username(userSaved.getUsername())
-              .authorities(userSaved.getAuthorities().stream().map(authority -> authority.getAuthority())
-                      .collect(Collectors.toList()))
-              .build();
+      return userDataToDto(userSaved);
   }
+
+    public UserDataGetRequestBody update(Long userId, UserDataPatchRequestBody user) {
+
+        UserData userRecovered = userDataRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        userRecovered.setName(user.getName());
+        userRecovered.setUsername(user.getUsername());
+        userRecovered.setAuthorities(user.getAuthorities());
+
+        UserData userSaved = userDataRepository.save(userRecovered);
+        return userDataToDto(userSaved);
+    }
+
+    public static UserDataGetRequestBody userDataToDto(UserData userSaved) {
+        return UserDataGetRequestBody.builder()
+                .id(userSaved.getId())
+                .name(userSaved.getName())
+                .username(userSaved.getUsername())
+                .authorities(userSaved.getAuthorities().stream()
+                        .map(authority -> authority.getAuthority())
+                        .collect(Collectors.toList()))
+                .build();
+    }
 
 }

@@ -1,6 +1,7 @@
 package br.com.andersonleite.animelinkapi.controller;
 
 import br.com.andersonleite.animelinkapi.dto.userData.UserDataGetRequestBody;
+import br.com.andersonleite.animelinkapi.dto.userData.UserDataPatchRequestBody;
 import br.com.andersonleite.animelinkapi.dto.userData.UserDataPostRequestBody;
 import br.com.andersonleite.animelinkapi.service.UserDataService;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,10 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDataGetRequestBody> save(@Valid @RequestBody UserDataPostRequestBody userData) {
         return new ResponseEntity<>(userDataService.save(userData), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDataGetRequestBody> update(@PathVariable Long id, @Valid @RequestBody UserDataPatchRequestBody userData) {
+        return new ResponseEntity<>(userDataService.update(id, userData), HttpStatus.OK);
     }
 }
