@@ -7,7 +7,7 @@
 
 Este projeto é uma API que esta sendo desenvolvida com Spring Boot para gerenciar informações sobre animes e usuários.
 
-## Estrutura do Projeto
+## Estrutura do Projeto 
 
 A estrutura do projeto segue a Arquitetura em Camadas, organizada da seguinte forma:
 
@@ -19,24 +19,30 @@ br.com.andersonleite.animelinkapi
 │ └── AnimeLinkWebMvnConfigurer.java
 ├── controller
 │ └── AnimeController.java
+│ └── UserController.java
 ├── domain
-│ ├── Anime.java
+│ └── Anime.java
 │ └── UserData.java
 ├── dto
-│ ├── AnimePostRequestBody.java
-│ └── AnimePutRequestBody.java
+├──── anime
+│   └── AnimePostRequestBody.java
+│   └── AnimePutRequestBody.java
+├──── userData
+│   └── UserDataGetRequestBody.java
+│   └── UserDataPatchRequestBody.java
+│   └── UserDataPostRequestBody.java
 ├── exception
-│ ├── BadRequestException.java
-│ ├── BadRequestExceptionDetails.java
-│ ├── ExceptionDetails.java
+│ └── BadRequestException.java
+│ └── BadRequestExceptionDetails.java
+│ └── ExceptionDetails.java
 │ └── ValidationExceptionDetails.java
 ├── handler
 │ └── RestExceptionHandler.java
 ├── repository
-│ ├── AnimeRepository.java
+│ └── AnimeRepository.java
 │ └── UserDataRepository.java
 ├── service
-│ ├── AnimeService.java
+│ └── AnimeService.java
 │ └── UserDataService.java
 ├── wrapper
 │ └── PageableResponse.java
@@ -62,7 +68,10 @@ br.com.andersonleite.animelinkapi
 - **dto**:
   - `AnimePostRequestBody.java`: DTO para criação de novos animes.
   - `AnimePutRequestBody.java`: DTO para atualização de animes existentes.
-
+  - `UserDataPostRequestBody.java`: DTO para exibicao das informacoes dos usuários.
+  - `UserDataPostRequestBody.java`: DTO para criação de novos usuários.
+  - `UserDataPatchRequestBody.java`: DTO para atualização de usuários existentes.
+    
 - **exception**:
   - `BadRequestException.java`: Exceção personalizada para requisições inválidas.
   - `BadRequestExceptionDetails.java`: Detalhes da exceção de requisição inválida.
@@ -111,12 +120,12 @@ br.com.andersonleite.animelinkapi
 
 1. Clone o repositório:
 ```sh
-git clone https://github.com/andersonleite1/AnimeApi.git
+git clone https://github.com/andersonleite1/AnimeLinkApi.git
 ```
 
 2. Navegue até o diretório do projeto:
 ```sh
-cd AnimeApi
+cd AnimeLinkApi
 ```
 
 3. Compile e execute a aplicação:
@@ -133,6 +142,11 @@ A API fornece os seguintes endpoints para gerenciar animes e dados de usuários:
 - GET /animes/{id}: Retorna os detalhes de um anime específico.
 - PUT /animes/{id}: Atualiza um anime existente.
 - DELETE /animes/{id}: Deleta um anime.
+
+- POST /user: Cria um novo usuário.
+- GET /user/{id}: Retorna os detalhes de um usuário específico.
+- PATCH /user/{id}: Atualiza um usuário existente.
+- DELETE /user/{id}: Deleta um anime.
 
 ### Tratamento de Exceções
 A API utiliza um manipulador global de exceções (RestExceptionHandler.java) para capturar e retornar respostas apropriadas para diferentes tipos de erros, como BadRequestException, ValidationException, entre outros.
