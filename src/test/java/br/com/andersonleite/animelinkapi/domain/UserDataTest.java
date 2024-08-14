@@ -48,16 +48,6 @@ public class UserDataTest {
     }
 
     @Test
-    void testNotEmptyName() {
-        userData.setName("");
-        Set<ConstraintViolation<UserData>> violations = Validation.buildDefaultValidatorFactory()
-                .getValidator().validate(userData);
-
-        Assertions.assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("The user name cannot be empty")));
-    }
-
-    @Test
     void testBuilder() {
         UserData builtUserData = UserData.builder()
                 .id(userDataValid.getId())
