@@ -34,4 +34,10 @@ public class UserController {
     public ResponseEntity<UserDataGetRequestBody> update(@PathVariable Long id, @Valid @RequestBody UserDataPatchRequestBody userData) {
         return new ResponseEntity<>(userDataService.update(id, userData), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        userDataService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

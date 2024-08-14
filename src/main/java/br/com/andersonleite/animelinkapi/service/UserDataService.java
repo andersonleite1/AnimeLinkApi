@@ -73,4 +73,8 @@ public class UserDataService implements UserDetailsService {
                 .build();
     }
 
+    public void delete(Long id) {
+        UserDataGetRequestBody user = getUserById(id);
+      userDataRepository.deleteById(user.getId());
+    }
 }
