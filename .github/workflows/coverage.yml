@@ -32,28 +32,34 @@ jobs:
           if [ -f target/site/jacoco/jacoco.xml ]; then
             echo "JaCoCo report found at target/site/jacoco/jacoco.xml"
           
-            # Extrai os valores de covered e missed usando grep e awk
-            COVERED_LINES=$(grep -oP '(?<=<counter type="LINE" covered=")\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
-            MISSED_LINES=$(grep -oP '(?<=<counter type="LINE" missed=")\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+            # Extrai e soma os valores de covered e missed usando grep e awk
+            COVERED_LINES=$(grep -oP '<counter type="LINE" covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
+            MISSED_LINES=$(grep -oP '<counter type="LINE" missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
           
-            # Mostra os valores extraídos para inspeção
-            echo "Extracted covered lines: ${COVERED_LINES}"
-            echo "Extracted missed lines: ${MISSED_LINES}"
+          # Mostra os valores extraídos para inspeção
+          echo "Extracted covered lines: ${COVERED_LINES}"
+          echo "Extracted missed lines: ${MISSED_LINES}"
           
-            # Verifica se as variáveis não estão vazias
-            if [ -z "$COVERED_LINES" ] || [ -z "$MISSED_LINES" ]; then
-              echo "Error: Could not extract covered or missed lines from JaCoCo report."
-              exit 1
+          # Verifica se as variáveis não estão vazias
+            if [ -z "$COVERED_LINES" ]; then
+            COVERED_LINES=0
+            fi
+            if [ -z "$MISSED_LINES" ]; then
+            MISSED_LINES=0
             fi
           
             # Calcula a porcentagem de cobertura
             TOTAL_LINES=$((COVERED_LINES + MISSED_LINES))
-            PERCENTAGE=$(awk "BEGIN { pc=100*${COVERED_LINES}/${TOTAL_LINES}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
-            echo "Coverage percentage: ${PERCENTAGE}%"
-          else
-            echo "Error: JaCoCo report not found at target/site/jacoco/jacoco.xml"
+            if [ "$TOTAL_LINES" -eq 0 ]; then
+          echo "Error: Total lines is zero. Cannot calculate coverage percentage."
             exit 1
-          fi
+            fi
+            PERCENTAGE=$(awk "BEGIN { pc=100*${COVERED_LINES}/${TOTAL_LINES}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
+          echo "Coverage percentage: ${PERCENTAGE}%"
+            else
+          echo "Error: JaCoCo report not found at target/site/jacoco/jacoco.xml"
+            exit 1
+            fi
 
       # Generate the badge SVG
       - name: Generate coverage badge
