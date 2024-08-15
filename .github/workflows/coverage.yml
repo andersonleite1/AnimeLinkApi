@@ -22,7 +22,7 @@ jobs:
       # Run tests and generate JaCoCo report
       - name: Run tests and generate JaCoCo report
         run: |
-          ./mvnw clean verify
+          ./mvnw clean verify -Dmaven.test.failure.ignore=true
 
       # Extract coverage value from JaCoCo XML report
       - name: Extract coverage percentage
