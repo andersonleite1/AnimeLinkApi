@@ -28,10 +28,23 @@ jobs:
       - name: Extract coverage percentage
         id: coverage
         run: |
-          COVERAGE=$(grep -oPm1 "(?<=<counter type=\"LINE\" covered=\")[^\"]+" target/site/jacoco/jacoco.xml)
-          TOTAL=$(grep -oPm1 "(?<=<counter type=\"LINE\" missed=\")[^\"]+" target/site/jacoco/jacoco.xml)
-          PERCENTAGE=$(awk "BEGIN { pc=100*${COVERAGE}/(${COVERAGE}+${TOTAL}); i=int(pc); print (pc-i<0.5)?i:i+1 }")
-          echo "##[set-output name=coverage;]${PERCENTAGE}"
+          if [ -f target/site/jacoco/jacoco.xml ]; then
+            COVERED_LINES=$(grep -oPm1 "(?<=<counter type=\"LINE\" covered=\")[^\"]+" target/site/jacoco/jacoco.xml)
+            MISSED_LINES=$(grep -oPm1 "(?<=<counter type=\"LINE\" missed=\")[^\"]+" target/site/jacoco/jacoco.xml)
+
+            if [ -z "$COVERED_LINES" ] || [ -z "$MISSED_LINES" ]; then
+              echo "Error: Could not extract covered or missed lines from JaCoCo report."
+              exit 1
+            fi
+
+            TOTAL_LINES=$((COVERED_LINES + MISSED_LINES))
+            PERCENTAGE=$(awk "BEGIN { pc=100*${COVERED_LINES}/${TOTAL_LINES}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
+            echo "Coverage percentage: ${PERCENTAGE}%"
+            echo "##[set-output name=coverage;]${PERCENTAGE}"
+          else
+            echo "Error: JaCoCo report not found at target/site/jacoco/jacoco.xml"
+            exit 1
+          fi
 
       # Generate the badge SVG
       - name: Generate coverage badge
