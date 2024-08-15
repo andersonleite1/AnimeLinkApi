@@ -1,3 +1,5 @@
+name: Update Badge
+
 on:
   push:
     branches:
@@ -9,36 +11,34 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to test this action
     steps:
-
-      # Get current banch name to use it as dest directory
+      
+      # Get current branch name to use it as destination directory
       - name: Extract branch name
         shell: bash
-        run: echo "branch=${GITHUB_REF#refs/heads/}" >> "${GITHUB_OUTPUT}"
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         id: extract_branch
 
       - name: Prepare environment
         id: coverage
         run: |
           # Generates a GitHub Workflow output named `lines` with a coverage value
-          echo "lines=${COVERAGE}" >> "${GITHUB_OUTPUT}"
+          echo "lines=${COVERAGE}" >> $GITHUB_ENV
           
           # Output values to be used by other steps
-          echo "path=${BADGE_PATH}" >> "${GITHUB_OUTPUT}"
-          echo "branch=${BRANCH}" >> "${GITHUB_OUTPUT}"
+          echo "path=${BADGE_PATH}" >> $GITHUB_ENV
+          echo "branch=${BRANCH}" >> $GITHUB_ENV
         env:
           COVERAGE: 53.5%
-          BADGE_PATH: ${{ steps.extract_branch.outputs.branch }}/test-badge.svg
+          BADGE_PATH: badges/test-badge.svg
           BRANCH: badges
 
       - uses: actions/checkout@v4
         with:
-          ref: ${{ steps.coverage.outputs.branch }}
+          ref: ${{ env.branch }}
 
       # Create the directory where badges will be saved, if needed
       - name: Create destination directory
-        env:
-          BADGE_PATH: ${{ steps.coverage.outputs.path }}
-        run: mkdir -p "${BADGE_PATH%/*}"
+        run: mkdir -p "${{ env.BADGE_PATH%/* }}"
 
       # Use the output from the `coverage` step
       - name: Generate the badge SVG image
@@ -46,29 +46,28 @@ jobs:
         id: badge
         with:
           label: 'Test coverage'
-          status: ${{ steps.coverage.outputs.lines }}
+          status: ${{ env.COVERAGE }}
           color: 'blue,555,daf'
-          path: ${{ steps.coverage.outputs.path }}
+          path: ${{ env.BADGE_PATH }}
 
       - name: Upload badge as artifact
         uses: actions/upload-artifact@v4
         with:
           name: badge
-          path: ${{ steps.coverage.outputs.path }}
+          path: ${{ env.BADGE_PATH }}
           if-no-files-found: error
 
       - name: Commit badge
         continue-on-error: true
-        env:
-          BADGE: ${{ steps.coverage.outputs.path }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add "${BADGE}"
-          git commit -m "Add/Update badge"
+          git add "${{ env.BADGE_PATH }}"
+          git commit -m "Add/Update badge" || echo "No changes to commit"
+
       - name: Push badge commit
         uses: ad-m/github-push-action@master
         if: ${{ success() }}
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
-          branch: ${{ steps.coverage.outputs.branch }}
+          branch: ${{ env.BRANCH }}
