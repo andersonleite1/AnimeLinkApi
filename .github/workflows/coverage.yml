@@ -1,50 +1,69 @@
-name: build
+name: Generate JaCoCo Coverage Badge
 
 on: [push]
 
 jobs:
-  coverage:
+  generate-badge:
     runs-on: ubuntu-latest
-    name: Generate test coverage badge
+    name: Generate JaCoCo Test Coverage Badge
     steps:
 
-      - name: Generate a coverage value
-        id: coverage
-        # Generates a GitHub Workflow output named `lines`
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      # Run tests and generate JaCoCo report
+      - name: Run tests and generate JaCoCo report
         run: |
-          COVERAGE="$( parse-coverage-report )"
-          echo "##[set-output name=lines;]${COVERAGE}%"
+          ./mvnw clean verify
 
-      # Use the output from the `coverage` step
-      - name: Generate the badge SVG image
+      # Extract coverage value from JaCoCo XML report
+      - name: Extract coverage percentage
+        id: coverage
+        run: |
+          COVERAGE=$(grep -oPm1 "(?<=<counter type=\"LINE\" covered=\")[^\"]+" target/site/jacoco/jacoco.xml)
+          TOTAL=$(grep -oPm1 "(?<=<counter type=\"LINE\" missed=\")[^\"]+" target/site/jacoco/jacoco.xml)
+          PERCENTAGE=$(awk "BEGIN { pc=100*${COVERAGE}/(${COVERAGE}+${TOTAL}); i=int(pc); print (pc-i<0.5)?i:i+1 }")
+          echo "##[set-output name=coverage;]${PERCENTAGE}"
+
+      # Generate the badge SVG
+      - name: Generate coverage badge
         uses: emibcn/badge-action@v1
         with:
-          label: 'Test coverage'
-          status: ${{ steps.coverage.outputs.lines }}
-          color: 'blue,555,daf'
-          path: badge.svg
+          label: 'Coverage'
+          status: ${{ steps.coverage.outputs.coverage }}%
+          color: ${{ steps.coverage.outputs.coverage > 90 && 'green' || steps.coverage.outputs.coverage > 75 && 'yellow,green' || steps.coverage.outputs.coverage > 50 && 'orange' || 'red' }}
+          path: badges/jacoco-coverage.svg
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-      - name: Create badges dir if necessary
-        run: mkdir -p .github/badges
-      - name: Generate the badge SVG image
-        uses: emibcn/badge-action@v1
+      # Push the badge to the `badges` branch
+      - name: Checkout badges branch
+        uses: actions/checkout@v2
         with:
-          label: 'Test coverage'
-          status: ${{ steps.coverage.outputs.lines }}
-          color: 'blue,555,daf'
-          path: .github/badges/badge.svg
+          ref: badges
+          path: badges
+
+      - name: Create badges directory if necessary
+        run: mkdir -p badges/
+
+      - name: Move badge to badges directory
+        run: mv badges/jacoco-coverage.svg badges/jacoco-coverage.svg
+
       - name: Commit badge
         run: |
+          cd badges
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add .github/badges/badge.svg
-          git commit -m "Add/Update badge"
-      - name: Push badge commit
-        uses: ad-m/github-push-action@master
+          git add jacoco-coverage.svg
+          git commit -m "Update JaCoCo coverage badge"
+
+      - name: Push badge to badges branch
+        uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ steps.extract_branch.outputs.branch }}
+          branch: badges
