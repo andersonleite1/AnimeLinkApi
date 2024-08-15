@@ -19,6 +19,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Create badges directory
+        run: mkdir -p badges
+
       # Run tests and generate JaCoCo report
       - name: Run tests and generate JaCoCo report
         run: |
