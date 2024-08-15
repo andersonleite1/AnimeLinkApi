@@ -1,101 +1,74 @@
-name: Generate JaCoCo Coverage Badge
-
-on: [push]
+on:
+  push:
+    branches:
+      - '*'
+      - '!badges'
 
 jobs:
-  generate-badge:
+  test:
     runs-on: ubuntu-latest
-    name: Generate JaCoCo Test Coverage Badge
+    name: A job to test this action
     steps:
 
-      # Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # Get current banch name to use it as dest directory
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> "${GITHUB_OUTPUT}"
+        id: extract_branch
 
-      # Set up JDK 17
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Create badges directory
-        run: mkdir -p badges
-
-      # Run tests and generate JaCoCo report
-      - name: Run tests and generate JaCoCo report
-        run: |
-          ./mvnw clean verify -Dmaven.test.failure.ignore=true
-
-      # Extract coverage value from JaCoCo XML report
-      - name: Extract coverage percentage
+      - name: Prepare environment
         id: coverage
         run: |
-          # Verifica se o arquivo target/site/jacoco/jacoco.xml existe
-          if [ -f target/site/jacoco/jacoco.xml ]; then
-            echo "JaCoCo report found at target/site/jacoco/jacoco.xml"
+          # Generates a GitHub Workflow output named `lines` with a coverage value
+          echo "lines=${COVERAGE}" >> "${GITHUB_OUTPUT}"
           
-            # Extrai e soma os valores de covered e missed usando grep e awk
-            COVERED_LINES=$(grep -oP '<counter type="LINE" covered="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
-            MISSED_LINES=$(grep -oP '<counter type="LINE" missed="\K\d+' target/site/jacoco/jacoco.xml | awk '{sum += $1} END {print sum}')
-          
-          # Mostra os valores extraídos para inspeção
-          echo "Extracted covered lines: ${COVERED_LINES}"
-          echo "Extracted missed lines: ${MISSED_LINES}"
-          
-          # Verifica se as variáveis não estão vazias
-            if [ -z "$COVERED_LINES" ]; then
-            COVERED_LINES=0
-            fi
-            if [ -z "$MISSED_LINES" ]; then
-            MISSED_LINES=0
-            fi
-          
-            # Calcula a porcentagem de cobertura
-            TOTAL_LINES=$((COVERED_LINES + MISSED_LINES))
-            if [ "$TOTAL_LINES" -eq 0 ]; then
-          echo "Error: Total lines is zero. Cannot calculate coverage percentage."
-            exit 1
-            fi
-            PERCENTAGE=$(awk "BEGIN { pc=100*${COVERED_LINES}/${TOTAL_LINES}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
-          echo "Coverage percentage: ${PERCENTAGE}%"
-            else
-          echo "Error: JaCoCo report not found at target/site/jacoco/jacoco.xml"
-            exit 1
-            fi
+          # Output values to be used by other steps
+          echo "path=${BADGE_PATH}" >> "${GITHUB_OUTPUT}"
+          echo "branch=${BRANCH}" >> "${GITHUB_OUTPUT}"
+        env:
+          COVERAGE: 53.5%
+          BADGE_PATH: ${{ steps.extract_branch.outputs.branch }}/test-badge.svg
+          BRANCH: badges
 
-      # Generate the badge SVG
-      - name: Generate coverage badge
-        uses: emibcn/badge-action@v1
+      - uses: actions/checkout@v4
         with:
-          label: 'Coverage'
-          status: ${{ steps.coverage.outputs.coverage }}%
-          color: ${{ steps.coverage.outputs.coverage > 90 && 'green' || steps.coverage.outputs.coverage > 75 && 'yellow,green' || steps.coverage.outputs.coverage > 50 && 'orange' || 'red' }}
-          path: badges/jacoco-coverage.svg
+          ref: ${{ steps.coverage.outputs.branch }}
 
-      # Push the badge to the `badges` branch
-      - name: Checkout badges branch
-        uses: actions/checkout@v2
+      # Create the directory where badges will be saved, if needed
+      - name: Create destination directory
+        env:
+          BADGE_PATH: ${{ steps.coverage.outputs.path }}
+        run: mkdir -p "${BADGE_PATH%/*}"
+
+      # Use the output from the `coverage` step
+      - name: Generate the badge SVG image
+        uses: emibcn/badge-action@v2.0.3
+        id: badge
         with:
-          ref: badges
-          path: badges
+          label: 'Test coverage'
+          status: ${{ steps.coverage.outputs.lines }}
+          color: 'blue,555,daf'
+          path: ${{ steps.coverage.outputs.path }}
 
-      - name: Create badges directory if necessary
-        run: mkdir -p badges/
-
-      - name: Move badge to badges directory
-        run: mv badges/jacoco-coverage.svg badges/jacoco-coverage.svg
+      - name: Upload badge as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: badge
+          path: ${{ steps.coverage.outputs.path }}
+          if-no-files-found: error
 
       - name: Commit badge
+        continue-on-error: true
+        env:
+          BADGE: ${{ steps.coverage.outputs.path }}
         run: |
-          cd badges
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add jacoco-coverage.svg
-          git commit -m "Update JaCoCo coverage badge"
-
-      - name: Push badge to badges branch
-        uses: ad-m/github-push-action@v0.6.0
+          git add "${BADGE}"
+          git commit -m "Add/Update badge"
+      - name: Push badge commit
+        uses: ad-m/github-push-action@master
+        if: ${{ success() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: badges
+          branch: ${{ steps.coverage.outputs.branch }}
