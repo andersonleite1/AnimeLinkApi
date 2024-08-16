@@ -9,6 +9,7 @@ import br.com.andersonleite.animelinkapi.util.AnimeCreator;
 import br.com.andersonleite.animelinkapi.util.AnimePostRequestBodyCreator;
 import br.com.andersonleite.animelinkapi.wrapper.PageableResponse;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
+@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)

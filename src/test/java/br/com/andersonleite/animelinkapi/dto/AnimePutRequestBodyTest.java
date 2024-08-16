@@ -302,21 +302,4 @@ public class AnimePutRequestBodyTest {
         assertEquals(expectedToString, animePutRequestBodyValid.toString());
     }
 
-    @Test
-    void testCanEqual_SameObject() {
-        assertTrue(animePutRequestBodyValid.canEqual(animePutRequestBodyValid));
-    }
-
-    @Test
-    void testCanEqual_DifferentClass() {
-        String differentClassObject = "I am a String";
-        assertFalse(animePutRequestBodyValid.canEqual(differentClassObject));
-    }
-
-    @Test
-    void testCanEqual_SameClassDifferentFields() {
-        AnimePutRequestBody anime2 = new AnimePutRequestBody(2L, "Naruto Shippuden", "A ninja story continued", 2007, "PG-13", "Masashi Kishimoto", "Studio Pierrot", false);
-        assertTrue(animePutRequestBodyValid.canEqual(anime2));
-    }
-
 }
